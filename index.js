@@ -1,4 +1,3 @@
-//	const electron = require('electron');
 const crawler = require('./src/crawler');
 const requestManager = require('./src/request-manager');
 const downloadManagerAPI = require('./src/download-manager');
@@ -6,6 +5,11 @@ const downloadManagerAPI = require('./src/download-manager');
 module.exports = (function () {
 	let userCollection;
 
+	/**
+	* Login user and stores their collection
+	* @param {Object} credentials
+	* @return {Promise}
+	*/
 	function login(credentials) {
 		let loginPromise = new Promise((resolve, reject) => {
 			requestManager.loginUser(credentials)
@@ -36,22 +40,42 @@ module.exports = (function () {
 		return loginPromise;
 	}
 
+	/**
+	* Get user collection
+	* @return {Array} userCollection
+	*/
 	function getUserCollection() {
 		return userCollection;
 	}
 
+	/**
+	* Search specific albums inside the collection.
+	* @param {String} query
+	* @return {Array}
+	*/
 	function searchByAlbum(query) {
 		return userCollection.filter(value => value.album.includes(query));
 	}
 
+	/**
+	* Search specific albums using artist name inside the collection.
+	* @param {String} query
+	* @return {Array}
+	*/
 	function searchByArtist(query) {
 		return userCollection.filter(value => value.artist.includes(query));
 	}
 
+	/**
+	* Downloads an specific collection to given path in the defined file format.
+	* @param {Array} collection
+	* @param {String} format
+	* @param {String} path
+	*/
 	function download(collection, format, path) {
 		let downloadManager = downloadManagerAPI(requestManager, path);
 
-		userCollection.forEach(album => {
+		collection.forEach(album => {
 			downloadManager.prepareDownload(album, format);
 		});
 	}
