@@ -1,0 +1,21 @@
+{
+  "name": "bandcamp-downloader",
+  "version": "0.0.1",
+  "description": "Node module to download Bandcamp songs in batches.",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape 'tests/*.js'"
+  },
+  "author": "RodrigoNascCarvalho",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "request": "^2.79.0",
+    "request-progress": "^3.0.0",
+    "request-promise": "^4.1.1"
+  },
+  "devDependencies": {
+    "tape": "^4.6.3",
+    "xo": "^0.17.1"
+  }
+}
