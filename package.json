@@ -4,7 +4,21 @@
   "description": "Node module to download Bandcamp songs in batches.",
   "main": "index.js",
   "scripts": {
-    "test": "tape 'tests/*.js'"
+    "test": "jest"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__tests__/mock-objects/"
+    ]
   },
   "author": "RodrigoNascCarvalho",
   "license": "ISC",
@@ -15,7 +29,7 @@
     "request-promise": "^4.1.1"
   },
   "devDependencies": {
-    "tape": "^4.6.3",
+    "jest-cli": "^18.0.0",
     "xo": "^0.17.1"
   }
 }

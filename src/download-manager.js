@@ -43,7 +43,6 @@ module.exports = (function (requestManager, path) {
 			.on('progress', state => {
 				downloadList[`${album.album}_${format}`].progress = state.percent * 100;
 
-				console.log('\033c');
 				console.log(downloadList);
 			})
 			.on('error', err => {
@@ -52,7 +51,6 @@ module.exports = (function (requestManager, path) {
 			.on('end', () => {
 				downloadList[`${album.album}_${format}`].progress = 100;
 
-				console.log('\033c');
 				console.log(downloadList);
 			})
 			.pipe(createWriteStream(`${path}/${album.album}_${format}.zip`));
