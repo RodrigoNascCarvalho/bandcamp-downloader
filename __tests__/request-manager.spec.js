@@ -1,12 +1,9 @@
-'use strict';
-
 const requestManager = require('../src/request-manager');
 
 test('Login Request with invalid credentials fails', () => {
 	let credentials = {username: 'user', password: 'password'};
 
 	requestManager.loginUser(credentials).then(result => {
-
 		expect(result.errors).toBeTruthy();
 		expect(result.errors[0].field).toBe('login.password');
 		expect(result.errors[0].reason).toBe('noMatch');
