@@ -69,6 +69,8 @@ module.exports = (function (requestManager) {
 			});
 		});
 
+		collection = collection.filter(item => item.downloadPage);
+
 		return _buildDownloadLinks();
 	}
 

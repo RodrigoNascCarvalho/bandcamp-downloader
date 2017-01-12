@@ -1,9 +1,11 @@
 const crawler = require('./src/crawler');
 const requestManager = require('./src/request-manager');
-const downloadManagerAPI = require('./src/download-manager');
+const downloadListAPI = require('./src/download-list');
+const downloaderAPI = require('./src/downloader');
 
 module.exports = (function () {
 	let userCollection;
+	let downloadList;
 
 	/**
 	* Login user and stores their collection
@@ -14,7 +16,7 @@ module.exports = (function () {
 		let loginPromise = new Promise((resolve, reject) => {
 			requestManager.loginUser(credentials)
 				.then(result => {
-					if (!result.ok) {
+					if (!result.ok || !result.next_url) {
 						reject(new Error('Unable to login user', result.errors));
 					}
 
@@ -72,12 +74,23 @@ module.exports = (function () {
 	* @param {String} format
 	* @param {String} path
 	*/
-	function download(collection, format, path) {
-		let downloadManager = downloadManagerAPI(requestManager, path);
+	function prepareDownloadList(collection, format) {
+		downloadList = downloadListAPI(requestManager);
 
-		collection.forEach(album => {
-			downloadManager.prepareDownload(album, format);
-		});
+		return Promise.all(collection.map(album => {
+			return downloadList.prepareDownload(album, format);
+		}));
+	}
+
+	/**
+	* Starts download of prepared collection.
+	* @param {String} path
+	* @return {Object} downloader.download
+	*/
+	function startDownload(path) {
+		let downloader = downloaderAPI(requestManager, downloadList.getDownloadList(), path);
+
+		return downloader.download();
 	}
 
 	return Object.freeze({
@@ -85,6 +98,7 @@ module.exports = (function () {
 		getUserCollection,
 		searchByArtist,
 		searchByAlbum,
-		download
+		prepareDownloadList,
+		startDownload
 	});
 })();

@@ -1,7 +1,4 @@
-const createWriteStream = require('fs').createWriteStream;
-const progress = require('request-progress');
-
-module.exports = (function (requestManager, path) {
+module.exports = (function (requestManager) {
 	let downloadList = [];
 
 	/**
@@ -30,30 +27,20 @@ module.exports = (function (requestManager, path) {
 	}
 
 	/**
-	* Start download, create download object to track progress for all downloads.
+	* Create download object to track progress for all downloads. Add it to list
+	* @param {String} link
+	* @param {String} album
+	* @param {String} format
 	*/
-	function _downloadAlbum(link, album, format) {
-		downloadList[`${album.album}_${format}`] = {
+	function _createDownloadItem(link, album, format) {
+		downloadList.push({
 			album: album,
+			link: link,
+			format: format,
+			index: downloadList.length,
 			progress: 0,
 			error: undefined
-		};
-
-		progress(requestManager.getUrl(link))
-			.on('progress', state => {
-				downloadList[`${album.album}_${format}`].progress = state.percent * 100;
-
-				console.log(downloadList);
-			})
-			.on('error', err => {
-				downloadList[`${album.album}_${format}`].error = err;
-			})
-			.on('end', () => {
-				downloadList[`${album.album}_${format}`].progress = 100;
-
-				console.log(downloadList);
-			})
-			.pipe(createWriteStream(`${path}/${album.album}_${format}.zip`));
+		});
 	}
 
 	/**
@@ -63,12 +50,15 @@ module.exports = (function (requestManager, path) {
 	*/
 	function prepareDownload(album, format) {
 		let downloadUrl = album.downloadLinks[format].url;
-		_validateDownload(downloadUrl)
-			.then(res => {
-				if (res.includes('"result":"ok"')) {
-					_downloadAlbum(downloadUrl, album, format);
-				}
-			});
+		return new Promise((resolve, reject) => {
+			_validateDownload(downloadUrl)
+				.then(res => {
+					if (res.includes('"result":"ok"')) {
+						_createDownloadItem(downloadUrl, album, format);
+						resolve();
+					}
+				}).catch(err => reject(err));
+		});
 	}
 
 	/**
