@@ -1,7 +1,7 @@
 {
   "name": "bandcamp-downloader",
-  "version": "0.0.1",
-  "description": "Node module to download Bandcamp songs in batches.",
+  "version": "0.1.0",
+  "description": "CLI to download Bandcamp songs in batches.",
   "main": "index.js",
   "scripts": {
     "test": "jest"
@@ -10,25 +10,30 @@
     "verbose": true,
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/*.js",
+      "**/*.ts",
       "!**/coverage/**",
       "!**/node_modules/**",
       "!**/vendor/**"
     ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/__tests__/mock-objects/"
+    "roots": [
+      "<rootDir>/src/crawler"
+    ],
+    "modulePaths": [
+      "<rootDir>/src/crawler"
     ]
   },
   "author": "RodrigoNascCarvalho",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^5.4.1",
     "cheerio": "^0.22.0",
+    "puppeteer": "^24.10.0",
     "request": "^2.79.0",
     "request-progress": "^3.0.0",
     "request-promise": "^4.1.1"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.15",
     "jest-cli": "^18.0.0",
     "xo": "^0.17.1"
   }

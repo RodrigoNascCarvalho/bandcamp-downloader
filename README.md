@@ -1,40 +1,22 @@
 # bandcamp-downloader
-This is a node module to download Bandcamp songs in batches.
+This is a CLI to download Bandcamp songs in batches.
 
-These are the current features: 
-- Log into bandcamp using module
-- Get user collection
-- Filter collection using Album query
-- Filter collection usgin Artist query
-- Prepare download links
-- Download files to your filesystem
-
-Code Example:
-```javascript
-downloader.login({username: 'user', password: 'password'})
-	.then(() => {
-		let collection = downloader.getUserCollection();
-		downloader.prepareDownloadList(collection, 'mp3-v0').then(() => {
-		let downloadManager = downloader.startDownload('./music');
-
-		downloadManager
-			.on('downloading', data => {
-				console.log(data.album.album);
-				console.log(data.progress);
-				console.log(data.index);
-			}).on('error', err => {
-				console.log(err);
-			}).on('downloaded', data => {
-				console.log(data.album.album);
-				console.log(data.progress);
-				console.log(data.index);
-				console.log('ended');
-			});
-		}).catch(err => console.log(err));
-	}).catch(err => console.log(err));
+These are the current features:
 ```
+--login: login to a user account, requires passing in --username and --password, credentials will be stored locally
+--logout: delete user data
+--list, -l: list albums from the user, requires login
+	--byAlbum: only list albums that contain search term
+	--byArtist: only list artists that contain search term
+--download, -d: download albums based off of criteria
+	--format: format has to be specified
+	--byAlbum: only list albums that contain search term
+	--byArtist: only list artists that contain search term
+```
+All information is only stored locally.
 
 TO DO:
+- Redo test files
 - Test JS files dependent on progress
 - Test JS files dependent on filestream
 - Check how individual tracks in a collection are returned from bandcamp
