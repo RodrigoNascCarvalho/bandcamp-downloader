@@ -10,13 +10,16 @@
     "verbose": true,
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/*.js",
+      "**/*.ts",
       "!**/coverage/**",
       "!**/node_modules/**",
       "!**/vendor/**"
     ],
-    "testPathIgnorePatterns": [
-      "/__tests__/mock-objects/"
+    "roots": [
+      "<rootDir>/src/crawler"
+    ],
+    "modulePaths": [
+      "<rootDir>/src/crawler"
     ]
   },
   "author": "RodrigoNascCarvalho",
